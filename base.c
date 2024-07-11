@@ -3,66 +3,40 @@
 
 int main()
 {
-    // Password checker
-
     char password[100];
-    char try_1[100];
-    char try_2[100];
-    char try_3[100];
+    char attempt[100];
+    int attempts_left = 3;
+    int authenticated = 0;
 
-    printf("Enter your password : ");
-    scanf("%s", &password);
+    printf("Enter your password: ");
+    fgets(password, sizeof(password), stdin);
+    password[strcspn(password, "\n")] = '\0';
 
-    printf("Confirm your password : ");
-    scanf("%s", &try_1);
-
-    int value;
-    value = strcmp(password, try_1);
-
-    if (value == 0)
+    while (attempts_left > 0 && !authenticated)
     {
-        printf("Correct password.");
-    }
-    else if (value != 0)
-    {
-        printf("Wrong password.\n");
-        printf("2 attempt left.\n");
-        printf("Re-enter your password : ");
-        scanf("%s", &try_2);
-        int value_1 = strcmp(password, try_2);
-        if (value_1 == 0)
+        printf("Confirm your password: ");
+        fgets(attempt, sizeof(attempt), stdin);
+        attempt[strcspn(attempt, "\n")] = '\0';
+
+        if (strcmp(password, attempt) == 0)
         {
-            printf("Correct password.");
-        }
-        else if (value_1 != 0)
-        {
-            printf("Wrong password.\n");
-            printf("1 attempt left.\n");
-            printf("Re-enter your password : ");
-            scanf("%s", &try_3);
-            int value_2 = strcmp(password, try_3);
-            if (value_2 == 0)
-            {
-                printf("Correct password.\n");
-            }
-            else if (value_2 != 0)
-            {
-                printf("Wrong password.\n");
-                printf("Try after sometime.\n");
-            }
-            else
-            {
-                printf("Something went wrong.\n");
-            }
+            printf("Correct password.\n");
+            authenticated = 1;
         }
         else
         {
-            printf("Something went wrong.\n");
+            attempts_left--;
+            printf("Wrong password.\n");
+            if (attempts_left > 0)
+            {
+                printf("%d attempt%s left.\n", attempts_left, attempts_left > 1 ? "s" : "");
+            }
         }
     }
-    else
+
+    if (!authenticated)
     {
-        printf("Something went wrong.\n");
+        printf("Try after sometime.\n");
     }
 
     return 0;
